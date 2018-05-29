@@ -1,37 +1,98 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://avatar-api.thekiwi.online/
 
 # Avatar API
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+The Avatar API is implemented as JSON over HTTP. 
+Our API is designed to have predictable, resource oriented URLs and use HTTP 
+response codes to indicate API errors. 
+Our API resources try to mirror schema.org schemas naming conventions where possible. 
+To make the Avatar API as explorable as possible, accounts have testmode API keys as 
+well as live-mode API keys. These keys can be active at the same time.
 
-## Questions Collection [/questions]
+##General Notes
+###SSL Only
+We require that all requests are done over SSL. Requests made over plain HTTP will fail.
+###UTF-8 Encoding
+Every string passed to and from the Avatar API needs to be UTF-8 encoded
+###Date Format
+All dates in the Avatar API are strings in the following format:
 
-### List All Questions [GET]
+`"Sat, 21 Aug 2010 22:31:20 +0000"`
+
+In code format, which can be used in all programming languages that support strftime or strptime:
+
+`"%a, %d %b %Y %H:%M:%S %z"`
+
+###Authentication
+You need to authenticate to the Avatar API by providing one of your API keys in the request. You can manage your keys from your account.
+You can have multiple keys with different access rights active at the same time.
+
+Your API keys carry many privileges, so be sure to keep them secret!
+
+##Standard Server Responses##
+
++ 200 `OK` - the request was successful.
++ 201 `Created` - the request was successful and a resouce was created.
++ 400 `Bad Request` - the request could not be understood or was missing required parameters.
++ 401 `Unauthorized` - authentication failed or user doesn't have permission for requested operation.
++ 402 `Request Failed` - the request was valid but failed.
++ 403 `Forbidden` - access denied.
++ 404 `Not Found` - resource was not found.
++ 405 `Method Not Allowed` - requested method is not supported for resource.
+
+##ERRORS
+Avatar API uses standard HTTP response codes to indicate success or failure of an API request. In general, codes in the 2xx range indicate success,
+codes in the 4xx range indicate an error that resulted from the provided information (e.g. a required parameter was missing), and codes in the
+5xx range indicate an error with PayMe's servers.
+
+Not all errors map cleanly onto HTTP response codes, however. When a request is valid but does not complete successfully (e.g. a payment is declined),
+we return a 402 error code.
+
+All errors will raise an exception with a type, a message describing this particular problem to the developer, and an optional user-friendly message that can
+be used for display purposes (e.g. Your payment was declined).
+
+####Error Attributes
+
+- **type:** The type of error returned, will be one of:
+    - *invalid_request_error* : Invalid request errors arise when your request has invalid parameters or you are not allowed to make such a request (API Key restrictions).  
+    - *api_error*             : API errors cover any other type of problem (e.g. a temporary problem with AVATAR's servers) and should only show up very infrequently.
+
+- **message:** Developer facing message describing the error.
+- **user_message:** *(optional)* A user-friendly message that can be used to inform end user of the error.
+- **parameters:** *(optional)* The parameter(s) the error relates to if the error is parameter related.
+
+####Example Error Response (Body)
+
+```JSON
+{
+   "error":[
+      {
+         type: "invalid_request_error",
+         message: "",
+         user_message: "",
+         parameters: ""
+      }
+   ]
+}
+```
+
+## Schemas Collection [/schemas]
+
+### List All Schemas [GET]
 
 + Response 200 (application/json)
 
         [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
+            { "personal_details": 
+                [
+                    {name: personaldetails}
+                    {root_url: /schemas/personaldetails/}    
                 ]
             }
         ]
+        
+## Questions Collection [/questions]
 
 ### Create a New Question [POST]
 
