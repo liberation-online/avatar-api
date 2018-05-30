@@ -115,7 +115,7 @@ and returns a JSON object which references datasets.
     + Body
     
             {
-                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
+                "address": "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
             }
         
 + Response 200 (application/json)
@@ -123,11 +123,11 @@ and returns a JSON object which references datasets.
     + Body
     
             {
-                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714",
-                updated_at: "2015-08-05T08:40:51.620Z",
-                datasets: {
-                    general: "g56261526",
-                    hobbies: "hj1h2jh1j2j"
+                "address": "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714",
+                "updated_at": "2015-08-05T08:40:51.620Z",
+                "datasets": {
+                    "general": "g56261526",
+                    "hobbies": "hj1h2jh1j2j"
                 }
             }
             
@@ -141,8 +141,8 @@ The signedtx is a signed message created by the user using a passcode that only 
     + Body
     
             {
-                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
-                signedtx: "0x9955af11969a2d2a7f860cb00e6a00cfa7c581f5df2dbe8ea16700b33f4b4b9b69f945012f7ea7d3febf11eb1b78e1adc2d1c14c2cf48b25000938cc1860c83e01"
+                "address": "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
+                "signedtx": "0x9955af11969a2d2a7f860cb00e6a00cfa7c581f5df2dbe8ea16700b33f4b4b9b69f945012f7ea7d3febf11eb1b78e1adc2d1c14c2cf48b25000938cc1860c83e01"
             }
 
 + Response 204
@@ -159,10 +159,11 @@ This request will return information about all public datasets.
     + Body
     
             {
-                general: {
-                    created_on: "2015-08-05T08:40:51.620Z",
-                    last_updated: "2015-08-05T08:40:51.620Z"
-                    datapoints: 15
+                "general": {
+                    "name": "general",
+                    "created_on": "2015-08-05T08:40:51.620Z",
+                    "last_updated": "2015-08-05T08:40:51.620Z",
+                    "datapoints": 15
                 }
             }
             
@@ -175,7 +176,7 @@ This request will return information about all public datasets.
     + Body
     
             {
-                id: "general"
+                "id": "general"
             }
             
 + Response 200 (application/json)
@@ -183,21 +184,21 @@ This request will return information about all public datasets.
     + Body
         
             {
-                id: "general"
-                datapoints: {
-                    gender: {
-                        type: select,
-                        question: "What gender are you?",
-                        options: "male,female",
+                "id": "general"
+                "datapoints": {
+                    "gender": {
+                        "type": select,
+                        "question": "What gender are you?",
+                        "options": "male,female",
                     },
-                    birthdate: {
-                        type: date,
-                        question: "What is your birthdate?"
+                    "birthdate": {
+                        "type": date,
+                        "question": "What is your birthdate?"
                     },
-                    age: {
-                        type: number,
-                        calculated: true,
-                        notes: "This datapoint is calculated from the Avatar birthdate."
+                    "age": {
+                        "type": number,
+                        "calculated": true,
+                        "notes": "This datapoint is calculated from the Avatar birthdate."
                     }
                 }
             }
