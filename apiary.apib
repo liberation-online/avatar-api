@@ -76,66 +76,128 @@ be used for display purposes (e.g. Your payment was declined).
    ]
 }
 ```
-
-## Schemas Collection [/schemas]
-
-### List All Schemas [GET]
-
-+ Response 200 (application/json)
-
-        [
-            { "personal_details": 
-                [
-                    {name: personaldetails}
-                    {root_url: /schemas/personaldetails/}    
-                ]
-            }
-        ]
         
-## Questions Collection [/questions]
+## AVATARS Collection [/avatars]
 
-### Create a New Question [POST]
+### Register a New AVATAR [POST]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+You may create your own avatar using this action. It simply takes a JSON
+object containing an address which should contain an ethereum address.
 
 + Request (application/json)
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
+    + Body
+    
+            {
+                "address": "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
+            }
 
 + Response 201 (application/json)
 
     + Headers
 
-            Location: /questions/2
+            Location: /avatars/0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714
 
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
+                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714",
+                created_at: "2015-08-05T08:40:51.620Z",
+            }
+            
+### Get AVATAR [GET]
+
+Get all data held against an avatar. It simply takes a JSON object containing an address
+and returns a JSON object which references datasets.
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
+            }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714",
+                updated_at: "2015-08-05T08:40:51.620Z",
+                datasets: {
+                    general: "g56261526",
+                    hobbies: "hj1h2jh1j2j"
+                }
+            }
+            
+### DELETE AVATAR [DELETE]
+
+Delete an Avatar. This action needs to be initiated by the Avatar owner. 
+The signedtx is a signed message created by the user using a passcode that only they know
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                address: "0xE9ACe1e7AD2C506D2FB60fAD481887Fc39819714"
+                signedtx: "0x9955af11969a2d2a7f860cb00e6a00cfa7c581f5df2dbe8ea16700b33f4b4b9b69f945012f7ea7d3febf11eb1b78e1adc2d1c14c2cf48b25000938cc1860c83e01"
+            }
+
++ Response 204
+
+
+## Datasets Collection [/datasets]
+    
+### Get information about all datasets [GET]
+
+This request will return information about all public datasets. 
+
++ Response 200
+
+    + Body
+    
+            {
+                general: {
+                    created_on: "2015-08-05T08:40:51.620Z",
+                    last_updated: "2015-08-05T08:40:51.620Z"
+                    datapoints: 15
+                }
+            }
+            
+## Dataset [/dataset/{id}]
+
+### Get information about a dataset [GET]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                id: "general"
+            }
+            
++ Response 200 (application/json)
+
+    + Body
+        
+            {
+                id: "general"
+                datapoints: {
+                    gender: {
+                        type: select,
+                        question: "What gender are you?",
+                        options: "male,female",
+                    },
+                    birthdate: {
+                        type: date,
+                        question: "What is your birthdate?"
+                    },
+                    age: {
+                        type: number,
+                        calculated: true,
+                        notes: "This datapoint is calculated from the Avatar birthdate."
                     }
-                ]
+                }
             }
